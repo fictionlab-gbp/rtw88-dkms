@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+FIRMWARE_DIR="/lib/firmware/rtw88"
+
+for FILE in "$FIRMWARE_DIR"/*.disabled; do
+    ORIGINAL_FILE="${FILE%.disabled}"
+    dpkg-divert --remove --rename "$ORIGINAL_FILE"
+done
