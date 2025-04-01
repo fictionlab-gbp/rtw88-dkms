@@ -7,3 +7,5 @@ for FILE in "$FIRMWARE_DIR"/*.disabled; do
     ORIGINAL_FILE="${FILE%.disabled}"
     dpkg-divert --remove --rename "$ORIGINAL_FILE"
 done
+
+#DEBHELPER#

@@ -2,7 +2,7 @@ Source: rtw88-dkms
 Maintainer: Błażej Sowa <blazej@fictionlab.pl>
 Section: kernel
 Priority: optional
-Standards-Version: 4.7.0
+Standards-Version: 4.6.2
 Build-Depends: debhelper-compat (= 13), dkms, dh-exec, dh-dkms, zstd
 
 Package: rtw88-dkms

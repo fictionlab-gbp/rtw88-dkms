@@ -18,3 +18,5 @@ FILES=(
 for FILE in "${FILES[@]}"; do
     dpkg-divert --add --rename --divert "$FIRMWARE_DIR/$FILE.disabled" "$FIRMWARE_DIR/$FILE"
 done
+
+#DEBHELPER#
