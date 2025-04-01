@@ -1,3 +1,9 @@
+rtw88-dkms (20250401-3) noble; urgency=medium
+
+  * Add copyright file, fix lintian errors
+
+ -- Błażej Sowa <blazej@fictionlab.pl>  Tue, 01 Apr 2025 15:17:50 +0000
+
 rtw88-dkms (20250401-2) noble; urgency=medium
 
   * Initial release.
