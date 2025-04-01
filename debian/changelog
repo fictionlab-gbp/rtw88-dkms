@@ -1,3 +1,9 @@
+rtw88-dkms (20250401-5) noble; urgency=medium
+
+  * Fix removing diversions
+
+ -- Błażej Sowa <blazej@fictionlab.pl>  Tue, 01 Apr 2025 16:03:15 +0000
+
 rtw88-dkms (20250401-4) noble; urgency=medium
 
   * Fix postrm script diversions when upgrading the package
