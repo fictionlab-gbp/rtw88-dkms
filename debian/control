@@ -1,0 +1,14 @@
+Source: rtw88-dkms
+Maintainer: Błażej Sowa <blazej@fictionlab.pl>
+Section: kernel
+Priority: optional
+Standards-Version: 4.7.0
+Build-Depends: debhelper-compat (= 13), dkms, dh-exec
+
+Package: rtw88-dkms
+Architecture: all
+Depends: ${misc:Depends}
+Description: Realtek 802.11ax driver in DKMS format
+ This package provides the source code for Realtek 802.11ax Linux
+ driver to be build with dkms. Kernel sources or headers are required to
+ compile this module.
