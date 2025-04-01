@@ -1,0 +1,4 @@
+#!/usr/bin/dh-exec
+blacklist-rtw88.conf etc/modprobe.d/
+firmware/*.bin lib/firmware/rtw88/
+*.c *.h Makefile usr/src/rtw88-${DEB_VERSION_UPSTREAM}/

@@ -3,7 +3,7 @@ Maintainer: Błażej Sowa <blazej@fictionlab.pl>
 Section: kernel
 Priority: optional
 Standards-Version: 4.7.0
-Build-Depends: debhelper-compat (= 13), dkms, dh-exec
+Build-Depends: debhelper-compat (= 13), dkms, dh-exec, dh-dkms, zstd
 
 Package: rtw88-dkms
 Architecture: all
