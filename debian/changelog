@@ -1,3 +1,9 @@
+rtw88-dkms (20250401-4) noble; urgency=medium
+
+  * Fix postrm script diversions when upgrading the package
+
+ -- Błażej Sowa <blazej@fictionlab.pl>  Tue, 01 Apr 2025 15:37:35 +0000
+
 rtw88-dkms (20250401-3) noble; urgency=medium
 
   * Add copyright file, fix lintian errors
