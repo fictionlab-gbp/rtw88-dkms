@@ -9,6 +9,10 @@ export DEB_VERSION_UPSTREAM
 override_dh_dkms:
 	dh_dkms -V $(DEB_VERSION_UPSTREAM)
 
+override_dh_installdeb:
+	dh_installdeb \
+		--define DIVERSIONS=@debian/diversions
+
 override_dh_install:
 	dh_install
 	zstd --quiet --compress --rm debian/rtw88-dkms/lib/firmware/rtw88/*.bin 

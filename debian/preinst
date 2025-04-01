@@ -1,22 +1,12 @@
 #!/bin/bash
 set -e
 
-FIRMWARE_DIR="/lib/firmware/rtw88"
 FILES=(
-    "rtw8703b_fw.bin.zst"
-    "rtw8703b_wow_fw.bin.zst"
-    "rtw8723d_fw.bin.zst"
-    "rtw8812a_fw.bin.zst"
-    "rtw8814a_fw.bin.zst"
-    "rtw8821a_fw.bin.zst"
-    "rtw8821c_fw.bin.zst"
-    "rtw8822b_fw.bin.zst"
-    "rtw8822c_fw.bin.zst"
-    "rtw8822c_wow_fw.bin.zst"
+    #DIVERSIONS#
 )
 
 for FILE in "${FILES[@]}"; do
-    dpkg-divert --add --rename --divert "$FIRMWARE_DIR/$FILE.disabled" "$FIRMWARE_DIR/$FILE"
+    dpkg-divert --add --rename --divert "$FILE.disabled" "$FILE"
 done
 
 #DEBHELPER#

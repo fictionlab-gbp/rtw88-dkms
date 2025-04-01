@@ -1,12 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-FIRMWARE_DIR="/lib/firmware/rtw88"
+FILES=(
+    #DIVERSIONS#
+)
 
 if [ remove = "$1" -o abort-install = "$1" -o disappear = "$1" ]; then
-    for FILE in "$FIRMWARE_DIR"/*.disabled; do
-        ORIGINAL_FILE="${FILE%.disabled}"
-        dpkg-divert --remove --rename "$ORIGINAL_FILE"
+    for FILE in "${FILES[@]}"; do
+        dpkg-divert --remove --rename "$FILE"
     done
 fi
 
