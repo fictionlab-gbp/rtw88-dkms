@@ -1,5 +1,5 @@
-rtw88-dkms (20250401-1) UNRELEASED; urgency=low
+rtw88-dkms (20250401-2) noble; urgency=medium
 
   * Initial release.
 
- -- Błażej Sowa <blazej@fictionlab.pl>  Tue, 01 Apr 2025 12:32:22 +0000
+ -- Błażej Sowa <blazej@fictionlab.pl>  Tue, 01 Apr 2025 14:55:39 +0000
