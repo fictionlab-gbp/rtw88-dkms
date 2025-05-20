@@ -1,3 +1,29 @@
+rtw88-dkms (20250520-1) noble; urgency=medium
+
+  [ Zenm Chen ]
+  * Add support for TP-LINK Archer T2UB Nano
+
+  [ Bitterblue Smith ]
+  * wifi: rtw88: usb: Reduce control message timeout to 500 ms
+  * wifi: rtw88: usb: Upload the firmware in bigger chunks
+  * wifi: rtw88: Transmit EAPOL frames at the lowest rate
+  * wifi: rtw88: usb: Discard packets smaller than FCS_LEN
+  * Revert "wifi: rtw88: usb: Discard packets smaller than FCS_LEN"
+  * wifi: rtw88: usb: Discard packets smaller than FCS_LEN
+  * wifi: rtw88: Maybe fix the random "error beacon valid" for USB
+
+  [ Zenm Chen ]
+  * Update README.md
+  * Rename blacklist-rtw88.conf to rtw88.conf
+  * Add reload_rtw88.sh
+  * Revert "Add support for TP-LINK Archer T2UB Nano"
+  * Makefile: Replace EXTRA_CFLAGS with ccflags-y
+
+  [ Kees Cook ]
+  * wifi: rtw88: Add __nonstring annotations for unterminated strings
+
+ -- Błażej Sowa <blazej@fictionlab.pl>  Tue, 20 May 2025 12:39:28 +0000
+
 rtw88-dkms (20250401-5) noble; urgency=medium
 
   * Fix removing diversions
