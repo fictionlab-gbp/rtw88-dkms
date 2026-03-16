@@ -1,3 +1,125 @@
+rtw88-dkms (20260316-1) UNRELEASED; urgency=medium
+
+  [ Bitterblue Smith ]
+  * wifi: rtw88: fix the 'para' buffer size to avoid reading out of bounds
+  * wifi: rtw88: pci: add PCI Express error handling
+  * wifi: rtw88: rtw8822bu VID/PID for BUFFALO WI-U2-866DM
+  * wifi: rtw88: do not ignore hardware read error during DPK
+  * wifi: rtw88: sdio: map mgmt frames to queue TX_DESC_QSEL_MGMT
+  * wifi: rtw88: sdio: call rtw_sdio_indicate_tx_status unconditionally
+  * wifi: rtw88: Fix the module names printed in dmesg
+  * wifi: rtw88: Rename the RTW_WCPU_11{AC,N} enums
+  * wifi: rtw88: usb: Remove redundant 'flush_workqueue()' calls
+  * wifi: rtw88: usb: Upload the firmware in bigger chunks (update)
+  * Delete sta_mode_only check
+  * Sync set_ampdu_factor stuff
+  * Sync SDIO RX aggregation stuff
+  * wifi: rtw88: sdio: Remove redundant 'flush_workqueue()' calls
+  * wifi: rtw88: Fix macid assigned to TDLS station
+  * wifi: rtw88: Lock rtwdev->mutex before setting the LED
+
+  [ Andrey Skvortsov ]
+  * wifi: rtw88: enable TX reports for the management queue
+
+  [ Pei Xiao ]
+  * wifi: rtw88: coex: Use bitwise instead of arithmetic operator for flags
+
+  [ Roopni Devanathan ]
+  * wifi: cfg80211/mac80211: Add support to get radio index
+
+  [ Ingo Molnar ]
+  * treewide, timers: Rename from_timer() to timer_container_of()
+
+  [ FelixBellaby ]
+  * Fix compilation for kernels older than 6.16
+
+  [ Zenm Chen ]
+  * Fix incorrect value of debug_mask
+  * Don't copy rtw88.conf to /etc/modprobe.d automatically
+  * Fix compilation on certain platforms
+
+  [ Bitterblue Smith ]
+  * wifi: rtw88: Use led->brightness_set_blocking for PCI too
+
+  [ Ping-Ke Shih ]
+  * wifi: rtw88: sdio: use indirect IO for device registers before power-on
+
+  [ Zenm Chen ]
+  * wifi: rtw88: Add USB ID 2001:3329 for D-Link AC13U rev. A1
+  * Update README.md
+
+  [ Bitterblue Smith ]
+  * wifi: rtw88: 8822b: Avoid WARNING in rtw8822b_set_antenna()
+
+  [ Chin-Yen Lee ]
+  * wifi: rtw88: 8822c: use fixed rate and bandwidth to reply CSI packets
+
+  [ Hiroaki Yamamoto ]
+  * wifi: rtw88: Add BUFFALO WI-U3-866DHP to the USB ID list
+
+  [ Marco Crivellari ]
+  * wifi: rtw88: add WQ_UNBOUND to alloc_workqueue users
+
+  [ Hsiu-Ming Chang ]
+  * wifi: rtw88: rtw8821cu: Add ID for Mercusys MU6H
+
+  [ Roman Peshkichev ]
+  * wifi: rtw88: fix DTIM period handling when conf->dtim_period is zero
+
+  [ Ping-Ke Shih ]
+  * wifi: rtw88: limit indirect IO under powered off for RTL8822CS
+
+  [ Bitterblue Smith ]
+  * Revert "wifi: rtw88: add WQ_UNBOUND to alloc_workqueue users"
+
+  [ Martin Hrůza ]
+  * wifi: rtw88: Increase RX gain before scanning
+
+  [ Bitterblue Smith ]
+  * wifi: rtw88: Fix alignment fault in rtw_core_enable_beacon()
+  * wifi: rtw88: Use devm_kmemdup() in rtw_set_supported_band()
+  * wifi: rtw88: Fix inadvertent sharing of struct ieee80211_supported_band data
+  * wifi: rtw88: Pass RX buffer to rtw_rx_query_rx_desc()
+  * wifi: rtw88: Pass TX descriptor to rtw_tx_fill_tx_desc()
+  * wifi: rtw88: Retry the firmware upload for 8051 chips
+  * wifi: rtw88: coex: Don't write 0xff1a for 8821AE/8812AE
+  * wifi: rtw88: 8812a: Add empty intf_table
+  * wifi: rtw88: 8821a: Add empty intf_table
+  * wifi: rtw88: 8812a: Fix TX queue mappings for PCI
+  * wifi: rtw88: 8812a: Fill TX page table for PCI
+  * wifi: rtw88: 8821a: Fill TX page table for PCI
+  * wifi: rtw88: 8812a: Correct TX/RX buffer descriptor sizes
+  * wifi: rtw88: 8821a: Correct TX/RX buffer descriptor sizes
+  * wifi: rtw88: 8821a: Enable deep power saving
+  * wifi: rtw88: 88xxa: Refactor rtw88xxa_read_usb_type() for PCI
+  * wifi: rtw88: 88xxa: Support PCI in the power on/off routines
+  * wifi: rtw88: 88xxa: Accept PCI devices and load their MAC address
+  * wifi: rtw88: pci: Introduce struct rtw_pci_gen
+  * wifi: rtw88: pci: Add functions to support older chips
+  * wifi: rtw88: Add rtw8821ae.c
+  * wifi: rtw88: Add rtw8812ae.c
+  * Makefile: Add the new RTL8821AE and RTL8812AE modules
+  * Blacklist the in-kernel RTL8821AE/RTL8812AE drivers
+  * README.md: Add RTL8821AE and RTL8812AE
+  * dkms.conf: Add rtw_8821ae and rtw_8812ae
+
+  [ Luna Hart ]
+  * rtw88: Fix builds for kernels older than 6.12.0
+
+  [ Bitterblue Smith ]
+  * wifi: rtw88: 88xxa: Fix RTL8812AE RF type detection
+  * wifi: rtw88: 8821a: Handle COEX_SET_ANT_2G_FREERUN
+  * wifi: rtw88: pci: Handle more RX interrupts for RTL8821AE
+  * README: RTL8812AE was tested
+  * wifi: rtw88: TX QOS Null data the same way as Null data
+  * Revert "wifi: rtw88: 8821a: Handle COEX_SET_ANT_2G_FREERUN"
+  * wifi: rtw88: coex: Ignore BT info byte 5 from RTL8821A
+
+  [ Błażej Sowa ]
+  * Add gbp.conf
+
+ -- Błażej Sowa <blazej@fictionlab.pl>  Mon, 16 Mar 2026 15:24:12 +0000
+
 rtw88-dkms (20250520-2) noble; urgency=medium
 
   * Fix debian install files
