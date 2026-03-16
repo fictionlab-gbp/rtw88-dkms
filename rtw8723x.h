@@ -137,10 +137,10 @@ struct rtw8723x_common {
 	void (*lck)(struct rtw_dev *rtwdev);
 	int (*read_efuse)(struct rtw_dev *rtwdev, u8 *log_map);
 	int (*mac_init)(struct rtw_dev *rtwdev);
+	int (*mac_postinit)(struct rtw_dev *rtwdev);
 	void (*cfg_ldo25)(struct rtw_dev *rtwdev, bool enable);
 	void (*set_tx_power_index)(struct rtw_dev *rtwdev);
 	void (*efuse_grant)(struct rtw_dev *rtwdev, bool on);
-	void (*set_ampdu_factor)(struct rtw_dev *rtwdev, u8 factor);
 	void (*false_alarm_statistics)(struct rtw_dev *rtwdev);
 	void (*iqk_backup_regs)(struct rtw_dev *rtwdev,
 				struct rtw8723x_iqk_backup_regs *backup);
@@ -154,7 +154,7 @@ struct rtw8723x_common {
 	void (*coex_cfg_init)(struct rtw_dev *rtwdev);
 	void (*fill_txdesc_checksum)(struct rtw_dev *rtwdev,
 				     struct rtw_tx_pkt_info *pkt_info,
-				     u8 *txdesc);
+				     struct rtw_tx_desc *txdesc);
 	void (*debug_txpwr_limit)(struct rtw_dev *rtwdev,
 				  struct rtw_txpwr_idx *table,
 				  int tx_path_count);
@@ -384,6 +384,11 @@ static inline int rtw8723x_mac_init(struct rtw_dev *rtwdev)
 	return rtw8723x_common.mac_init(rtwdev);
 }
 
+static inline int rtw8723x_mac_postinit(struct rtw_dev *rtwdev)
+{
+	return rtw8723x_common.mac_postinit(rtwdev);
+}
+
 static inline void rtw8723x_cfg_ldo25(struct rtw_dev *rtwdev, bool enable)
 {
 	rtw8723x_common.cfg_ldo25(rtwdev, enable);
@@ -397,11 +402,6 @@ static inline void rtw8723x_set_tx_power_index(struct rtw_dev *rtwdev)
 static inline void rtw8723x_efuse_grant(struct rtw_dev *rtwdev, bool on)
 {
 	rtw8723x_common.efuse_grant(rtwdev, on);
-}
-
-static inline void rtw8723x_set_ampdu_factor(struct rtw_dev *rtwdev, u8 factor)
-{
-	rtw8723x_common.set_ampdu_factor(rtwdev, factor);
 }
 
 static inline void rtw8723x_false_alarm_statistics(struct rtw_dev *rtwdev)
@@ -450,7 +450,7 @@ static inline void rtw8723x_coex_cfg_init(struct rtw_dev *rtwdev)
 static inline
 void rtw8723x_fill_txdesc_checksum(struct rtw_dev *rtwdev,
 				   struct rtw_tx_pkt_info *pkt_info,
-				   u8 *txdesc)
+				   struct rtw_tx_desc *txdesc)
 {
 	rtw8723x_common.fill_txdesc_checksum(rtwdev, pkt_info, txdesc);
 }

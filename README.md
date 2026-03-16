@@ -5,6 +5,8 @@ The most recent addition to this repo is the driver for the RTL8814AU chipset. T
 
 Update: There is now also a driver for RTL8814AE PCIe cards, ID 10ec:8813. lspci may call it RTL8813AE, same thing. Please test and report if you still have this card.
 
+Update: RTL8812AE and RTL8821AE are supported now. Please report if it works/doesn't work.
+
 🌟 The code in this repo stays in sync with the `wireless-next` repository, with additional changes to accommodate kernel API changes over time.
 
 📌 **Note**: The `wireless-next` repo contains the code set for the ***next*** kernel version. If kernel 6.X is out, kernel mainline repo is on 6.X+1-rcY, and `wireless-next` targets kernel 6.X+2 material.
@@ -16,7 +18,7 @@ Compatible with **Linux kernel versions 5.4 and newer** as long as your distro h
 
 
 #### Supported Chipsets
-- **PCIe**: RTL8723DE, RTL8814AE, RTL8821CE, RTL8822BE, RTL8822CE
+- **PCIe**: RTL8723DE, RTL8812AE, RTL8814AE, RTL8821AE, RTL8821CE, RTL8822BE, RTL8822CE
 - **SDIO**: RTL8723CS, RTL8723DS, RTL8821CS, RTL8822BS, RTL8822CS
 - **USB** : RTL8723DU, RTL8811AU, RTL8811CU, RTL8812AU, RTL8812BU, RTL8812CU
 - **USB** : RTL8814AU, RTL8821AU, RTL8821CU, RTL8822BU, RTL8822CU
@@ -67,7 +69,7 @@ sudo pacman -Syu
 ```bash
 sudo pacman -Sy base-devel git linux-firmware
 ```
-Remember to install the corresponding [kernel headers](https://archlinux.org/packages/?q=Headers+and+scripts+for+building+modules) which is also needed for compilation.
+Remember to install the corresponding [kernel headers](https://archlinux.org/packages/?q=Headers+and+scripts+for+building+modules) which are also needed for compilation.
 
 #### Raspberry Pi OS
 ```bash
@@ -80,7 +82,7 @@ sudo apt install -y raspberrypi-kernel-headers build-essential git
 ---
 
 ### Installation Using DKMS 🔄
-It's highly recommended to install this driver via DKMS especially Secure Boot is enabled on your machine. Using DKMS (Dynamic Kernel Module Support) ensures that the `rtw88` kernel modules are automatically rebuilt and re-signed whenever the Linux kernel is updated. Without DKMS, these drivers would stop working after each kernel update, requiring manual re-compilation and re-signing. DKMS should be available through your distribution’s package manager. You can learn more about DKMS [here](https://github.com/dell/dkms).
+Installing this driver via DKMS is highly recommended, especially if Secure Boot is enabled on your machine. Using DKMS (Dynamic Kernel Module Support) ensures that the `rtw88` kernel modules are automatically rebuilt and re-signed whenever the Linux kernel is updated. Without DKMS, these drivers would stop working after each kernel update, requiring manual re-compilation and re-signing. DKMS should be available through your distribution’s package manager. You can learn more about DKMS [here](https://github.com/dell/dkms).
 
 1. Install `dkms` and all its required dependencies using your preferred package manager.
 
@@ -89,7 +91,7 @@ It's highly recommended to install this driver via DKMS especially Secure Boot i
    git clone https://github.com/lwfinger/rtw88
    ```
 
-3. Build, sign and install the rtw88 driver
+3. Build, sign, and install the rtw88 driver
    ```
    cd rtw88
    ```
@@ -102,7 +104,12 @@ It's highly recommended to install this driver via DKMS especially Secure Boot i
    sudo make install_fw
    ```
 
-5. Enroll the MOK (Machine Owner Key), this is needed **ONLY IF** Secure Boot is enabled on your machine.
+5. Copy the configuration file `rtw88.conf` to `/etc/modprobe.d/`
+   ```
+   sudo cp rtw88.conf /etc/modprobe.d/
+   ```
+
+6. Enroll the MOK (Machine Owner Key), this is needed **ONLY IF** Secure Boot is enabled on your machine.
    ```
    sudo mokutil --import /var/lib/dkms/mok.pub
    ```
@@ -135,11 +142,14 @@ sudo make install
 ```bash
 sudo make install_fw
 ```
+```bash
+sudo cp rtw88.conf /etc/modprobe.d/
+```
 ---
 
 ### Installation for Arch-based Distros 🛠
 
-This is the best way for Arch-based distro users to install this driver, one more step is required after running `makepkg -si` if Secure Boot is enabled on your machine: Enroll the MOK. Please see the step 5 in [Installation Using DKMS](#installation-using-dkms-) for details.
+This is the best way for Arch-based distro users to install this driver, one more step is required after running `makepkg -si` if Secure Boot is enabled on your machine: Enroll the MOK. Please see the step 6 in [Installation Using DKMS](#installation-using-dkms-) for details.
 
 ```bash
 git clone https://aur.archlinux.org/rtw88-dkms-git.git
@@ -156,7 +166,7 @@ makepkg -si
 Below is important information for using this driver.
 
 ### 1. Blacklisting 🚫
-A file called `rtw88.conf` will be installed into `/etc/modprobe.d`. It will blacklist all in-kernel rtw88 drivers, however, it will not blacklist out-of-kernel vendor drivers. You will need to uninstall any out-of-kernel vendor drivers that you have installed that may conflict.
+The configuration file `rtw88.conf` in `/etc/modprobe.d/` will blacklist all in-kernel rtw88 drivers, however, it will not blacklist out-of-kernel vendor drivers. You will need to uninstall any out-of-kernel vendor drivers that you have installed that may conflict. 
 
 ### 2. Recovery Problems After Sleep/Hibernation 🛌
 Some BIOSs have trouble changing power state from D3hot to D0. If you have this problem, run 
@@ -196,14 +206,20 @@ cfg80211             1064960  2 rtw_core,mac80211
 
 ### 4. How To Update The Driver Installed via DKMS
 
-1. Remove the installed rtw88 drivers completely, please see [Q1](#q1-how-to-remove-this-driver-if-it-doesnt-work-as-expected) in Q&A for details.
+1. Remove the rtw88 driver and its source code.
+   ```
+   sudo dkms remove rtw88/0.6 --all
+   ```
+   ```
+   sudo rm -r /usr/src/rtw88-0.6/
+   ```
 
 2. Run this command in the rtw88 source directory to pull the latest code 
    ```
    git pull
    ```
 
-3. Build, sign, install the rtw88 driver from the latest code
+3. Build, sign, and install the rtw88 driver from the latest code
    ```
    sudo dkms install $PWD
    ```
@@ -218,19 +234,19 @@ For users who installed this driver via DKMS, run
 sudo dkms remove rtw88/0.6 --all
 ```
 ```
-sudo rm -rf /var/lib/dkms/rtw88
-```
-```
 sudo rm -rf /usr/src/rtw88-0.6
 ```
 ```
 sudo rm -f /etc/modprobe.d/rtw88.conf
 ```
 
-For users who installed this driver via `make`, run this command in the rtw88 source directory and then the rtw88 driver will be unloaded and removed.
+For users who installed this driver via `make`, run these commands in the rtw88 source directory and then the rtw88 driver will be unloaded and removed.
 
 ```
 sudo make uninstall
+```
+```
+sudo rm /etc/modprobe.d/rtw88.conf
 ```
 
 For Arch-based distro users, run
@@ -239,7 +255,7 @@ For Arch-based distro users, run
 sudo pacman -Rn rtw88-dkms-git
 ```
 
-### Q2: My Wi-Fi adapter is plugged in an USB 3 port, how can I keep it in USB 2 mode to avoid potential interference in 2.4 GHz band?
+### Q2: My Wi-Fi adapter is plugged into a USB 3 port. How can I keep it in USB 2 mode to avoid potential interference in the 2.4 GHz band?
 The module `rtw_usb` has a parameter named `switch_usb_mode` which can enable or disable USB mode switching, setting it to "n" will keep your adapter in USB 2 mode.
 
 Steps:
@@ -247,7 +263,7 @@ Steps:
 2. Change `switch_usb_mode=y` to `switch_usb_mode=n` in line 7.
 3. Unplug the Wi-Fi adapter.
 4. Reboot (or [unload the rtw88 drivers](#3-how-to-loadunload-kernel-modules-aka-drivers))
-5. Plug your Wi-Fi adapter back.
+5. Plug your Wi-Fi adapter back in.
 
 ### Q3: My Wi-Fi adapter still doesn't work after installing this driver and `lsusb` shows it is in CD-ROM mode, what should I do?
 Install `usb_modeswitch` which can switch your adapter from CD-ROM mode to Wi-Fi mode and then your Wi-Fi adapter should be in Wi-Fi mode after reboot.

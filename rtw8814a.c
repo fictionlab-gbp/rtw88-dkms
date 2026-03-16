@@ -1332,6 +1332,9 @@ static void rtw8814a_cfg_ldo25(struct rtw_dev *rtwdev, bool enable)
 {
 }
 
+/* Without this RTL8814A sends too many frames and (some?) 11n AP
+ * can't handle it, resulting in low TX speed. Other chips seem fine.
+ */
 static void rtw8814a_set_ampdu_factor(struct rtw_dev *rtwdev, u8 factor)
 {
 	factor = min_t(u8, factor, IEEE80211_VHT_MAX_AMPDU_256K);
@@ -2037,7 +2040,7 @@ static void rtw8814a_led_set(struct led_classdev *led,
 
 static void rtw8814a_fill_txdesc_checksum(struct rtw_dev *rtwdev,
 					  struct rtw_tx_pkt_info *pkt_info,
-					  u8 *txdesc)
+					  struct rtw_tx_desc *txdesc)
 {
 	size_t words = 32 / 2; /* calculate the first 32 bytes (16 words) */
 
@@ -2052,6 +2055,7 @@ static const struct rtw_chip_ops rtw8814a_ops = {
 	.query_phy_status	= rtw8814a_query_phy_status,
 	.set_channel		= rtw8814a_set_channel,
 	.mac_init		= rtw8814a_mac_init,
+	.mac_postinit		= NULL,
 	.read_rf		= rtw_phy_read_rf,
 	.write_rf		= rtw_phy_write_rf_reg_sipi,
 	.set_tx_power_index	= rtw8814a_set_tx_power_index,
@@ -2177,7 +2181,7 @@ const struct rtw_chip_info rtw8814a_hw_spec = {
 	.ops = &rtw8814a_ops,
 	.id = RTW_CHIP_TYPE_8814A,
 	.fw_name = "rtw88/rtw8814a_fw.bin",
-	.wlan_cpu = RTW_WCPU_11AC,
+	.wlan_cpu = RTW_WCPU_3081,
 	.tx_pkt_desc_sz = 40,
 	.tx_buf_desc_sz = 16,
 	.rx_pkt_desc_sz = 24,
@@ -2197,7 +2201,7 @@ const struct rtw_chip_info rtw8814a_hw_spec = {
 	.rx_ldpc = true,
 	.max_power_index = 0x3f,
 	.ampdu_density = IEEE80211_HT_MPDU_DENSITY_2,
-	.amsdu_in_ampdu = false,
+	.amsdu_in_ampdu = false, /* RX speed is better without AMSDU */
 	.usb_tx_agg_desc_num = 3,
 	.hw_feature_report = false,
 	.c2h_ra_report_size = 6,

@@ -353,7 +353,6 @@ static int __rtw8723x_read_efuse(struct rtw_dev *rtwdev, u8 *log_map)
 
 static int __rtw8723x_mac_init(struct rtw_dev *rtwdev)
 {
-	rtw_write8(rtwdev, REG_FWHW_TXQ_CTRL + 1, WLAN_TXQ_RPT_EN);
 	rtw_write32(rtwdev, REG_TCR, BIT_TCR_CFG);
 
 	rtw_write16(rtwdev, REG_RXFLTMAP0, WLAN_RX_FILTER0);
@@ -366,6 +365,13 @@ static int __rtw8723x_mac_init(struct rtw_dev *rtwdev)
 
 	rtw_write8(rtwdev, REG_MISC_CTRL, BIT_DIS_SECOND_CCA);
 	rtw_write8(rtwdev, REG_2ND_CCA_CTRL, 0);
+
+	return 0;
+}
+
+static int __rtw8723x_mac_postinit(struct rtw_dev *rtwdev)
+{
+	rtw_write8(rtwdev, REG_FWHW_TXQ_CTRL + 1, WLAN_TXQ_RPT_EN);
 
 	return 0;
 }
@@ -431,13 +437,6 @@ static void __rtw8723x_efuse_grant(struct rtw_dev *rtwdev, bool on)
 	} else {
 		rtw_write8(rtwdev, REG_EFUSE_ACCESS, EFUSE_ACCESS_OFF);
 	}
-}
-
-static void __rtw8723x_set_ampdu_factor(struct rtw_dev *rtwdev, u8 factor)
-{
-	factor = min_t(u8, factor, IEEE80211_HT_MAX_AMPDU_32K);
-
-	rtw_write32(rtwdev, REG_AMPDU_MAX_LENGTH, (8192 << factor) - 1);
 }
 
 static void __rtw8723x_false_alarm_statistics(struct rtw_dev *rtwdev)
@@ -681,7 +680,7 @@ void __rtw8723x_pwrtrack_set_xtal(struct rtw_dev *rtwdev, u8 therm_path,
 static
 void __rtw8723x_fill_txdesc_checksum(struct rtw_dev *rtwdev,
 				     struct rtw_tx_pkt_info *pkt_info,
-				     u8 *txdesc)
+				     struct rtw_tx_desc *txdesc)
 {
 	size_t words = 32 / 2; /* calculate the first 32 bytes (16 words) */
 	__le16 chksum = 0;
@@ -767,10 +766,10 @@ const struct rtw8723x_common rtw8723x_common = {
 	.lck = __rtw8723x_lck,
 	.read_efuse = __rtw8723x_read_efuse,
 	.mac_init = __rtw8723x_mac_init,
+	.mac_postinit = __rtw8723x_mac_postinit,
 	.cfg_ldo25 = __rtw8723x_cfg_ldo25,
 	.set_tx_power_index = __rtw8723x_set_tx_power_index,
 	.efuse_grant = __rtw8723x_efuse_grant,
-	.set_ampdu_factor = __rtw8723x_set_ampdu_factor,
 	.false_alarm_statistics = __rtw8723x_false_alarm_statistics,
 	.iqk_backup_regs = __rtw8723x_iqk_backup_regs,
 	.iqk_restore_regs = __rtw8723x_iqk_restore_regs,

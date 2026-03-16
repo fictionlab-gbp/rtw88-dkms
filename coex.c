@@ -309,7 +309,7 @@ static void rtw_coex_tdma_timer_base(struct rtw_dev *rtwdev, u8 type)
 {
 	struct rtw_coex *coex = &rtwdev->coex;
 	struct rtw_coex_stat *coex_stat = &coex->stat;
-	u8 para[2] = {0};
+	u8 para[6] = {};
 	u8 times;
 	u16 tbtt_interval = coex_stat->wl_beacon_interval;
 
@@ -1501,28 +1501,28 @@ static u8 rtw_coex_algorithm(struct rtw_dev *rtwdev)
 		algorithm = COEX_ALGO_HFP;
 		break;
 	case           BPM_HID:
-	case BPM_HFP + BPM_HID:
+	case BPM_HFP | BPM_HID:
 		algorithm = COEX_ALGO_HID;
 		break;
-	case BPM_HFP           + BPM_A2DP:
-	case           BPM_HID + BPM_A2DP:
-	case BPM_HFP + BPM_HID + BPM_A2DP:
+	case BPM_HFP           | BPM_A2DP:
+	case           BPM_HID | BPM_A2DP:
+	case BPM_HFP | BPM_HID | BPM_A2DP:
 		algorithm = COEX_ALGO_A2DP_HID;
 		break;
-	case BPM_HFP                      + BPM_PAN:
-	case           BPM_HID            + BPM_PAN:
-	case BPM_HFP + BPM_HID            + BPM_PAN:
+	case BPM_HFP                      | BPM_PAN:
+	case           BPM_HID            | BPM_PAN:
+	case BPM_HFP | BPM_HID            | BPM_PAN:
 		algorithm = COEX_ALGO_PAN_HID;
 		break;
-	case BPM_HFP           + BPM_A2DP + BPM_PAN:
-	case           BPM_HID + BPM_A2DP + BPM_PAN:
-	case BPM_HFP + BPM_HID + BPM_A2DP + BPM_PAN:
+	case BPM_HFP           | BPM_A2DP | BPM_PAN:
+	case           BPM_HID | BPM_A2DP | BPM_PAN:
+	case BPM_HFP | BPM_HID | BPM_A2DP | BPM_PAN:
 		algorithm = COEX_ALGO_A2DP_PAN_HID;
 		break;
 	case                                BPM_PAN:
 		algorithm = COEX_ALGO_PAN;
 		break;
-	case                     BPM_A2DP + BPM_PAN:
+	case                     BPM_A2DP | BPM_PAN:
 		algorithm = COEX_ALGO_A2DP_PAN;
 		break;
 	case                     BPM_A2DP:
@@ -2767,8 +2767,10 @@ void rtw_coex_power_on_setting(struct rtw_dev *rtwdev)
 	rtw_coex_set_ant_path(rtwdev, true, COEX_SET_ANT_POWERON);
 
 	rtw_coex_table(rtwdev, true, table_case);
-	/* red x issue */
-	rtw_write8(rtwdev, 0xff1a, 0x0);
+	if (rtwdev->chip->id != RTW_CHIP_TYPE_8821A &&
+	    rtwdev->chip->id != RTW_CHIP_TYPE_8812A)
+		/* red x issue */
+		rtw_write8(rtwdev, 0xff1a, 0x0);
 	rtw_coex_set_gnt_debug(rtwdev);
 }
 EXPORT_SYMBOL(rtw_coex_power_on_setting);
@@ -3094,6 +3096,9 @@ void rtw_coex_bt_info_notify(struct rtw_dev *rtwdev, u8 *buf, u8 length)
 
 	for (i = 0; i < COEX_BTINFO_LENGTH; i++)
 		coex_stat->bt_info_c2h[rsp_source][i] = buf[i];
+
+	if (rtwdev->chip->id == RTW_CHIP_TYPE_8821A)
+		coex_stat->bt_info_c2h[rsp_source][5] = 0;
 
 	/* get the same info from bt, skip it */
 	if (coex_stat->bt_info_c2h[rsp_source][1] == coex_stat->bt_info_lb2 &&
