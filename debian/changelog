@@ -1,4 +1,4 @@
-rtw88-dkms (20260316-1) UNRELEASED; urgency=medium
+rtw88-dkms (20260316-1) noble; urgency=medium
 
   [ Bitterblue Smith ]
   * wifi: rtw88: fix the 'para' buffer size to avoid reading out of bounds
@@ -118,7 +118,7 @@ rtw88-dkms (20260316-1) UNRELEASED; urgency=medium
   [ Błażej Sowa ]
   * Add gbp.conf
 
- -- Błażej Sowa <blazej@fictionlab.pl>  Mon, 16 Mar 2026 15:24:12 +0000
+ -- Błażej Sowa <blazej@fictionlab.pl>  Mon, 16 Mar 2026 15:28:58 +0000
 
 rtw88-dkms (20250520-2) noble; urgency=medium
 
